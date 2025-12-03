@@ -37,7 +37,7 @@ export default buildConfig({
   ],
   cors: [
     'http://localhost:4321',
-    'https://vebdev-web.vercel.app', // <--- ТВОЙ НОВЫЙ ДОМЕН САЙТА
+    'astro-payload-web.vercel.app', 
   ],
-  csrf: ['http://localhost:4321', 'https://vebdev-web.vercel.app'],
+  csrf: ['http://localhost:4321', 'astro-payload-web.vercel.app'],
 })
