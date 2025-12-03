@@ -1,0 +1,66 @@
+---
+import BlockRenderer from '../components/BlockRenderer.astro';
+interface Page {
+	title: string;
+	slug: string;
+	layout: any[];
+}
+interface Props {
+	page: Page;
+}
+
+export async function getStaticPaths() {
+	const cmsUrl = import.meta.env.CMS_URL || 'http://localhost:3000';
+	const response = await fetch(`${cmsUrl}/api/pages?limit=1000`);
+	if (!response.ok) throw new Error('Ошибка сети при запросе к CMS');
+	const {docs: pages} = await response.json();
+
+	return pages.map((page: any) => {
+		return {
+			params: {
+				slug: page.slug === 'home' ? undefined : page.slug,
+			},
+			props: {page},
+		};
+	});
+}
+
+const {page} = Astro.props;
+---
+
+<html lang='ru'>
+	<head>
+		<meta charset='utf-8' />
+		<title>{page.title} | Veb-Dev Logistics</title>
+		<meta
+			name='viewport'
+			content='width=device-width'
+		/>
+		<link
+			rel='icon'
+			type='image/svg+xml'
+			href='/favicon.svg'
+		/>
+	</head>
+	<body style='margin: 0; font-family: sans-serif;'>
+		<header style='padding: 20px; border-bottom: 1px solid #eee;'>
+			<strong>Logo Veb-Dev</strong>
+			<nav style='display: inline-block; margin-left: 20px;'>
+				<a
+					href='/'
+					style='margin-right: 10px;'
+					>Главная</a
+				>
+				<a href='/about'>О нас</a>
+			</nav>
+		</header>
+
+		<main>
+			<BlockRenderer blocks={page.layout} />
+		</main>
+
+		<footer style='padding: 20px; background: #eee; margin-top: 50px;'>
+			&copy; 2025 Veb-Dev Logistics
+		</footer>
+	</body>
+</html>

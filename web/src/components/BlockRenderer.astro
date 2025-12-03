@@ -1,0 +1,27 @@
+---
+import Hero from './Hero.astro';
+import Content from './Content.astro';
+
+const {blocks} = Astro.props;
+---
+
+{
+	blocks?.map((block: any) => {
+		// Payload присылает тип блока в поле 'blockType'
+		// Оно совпадает со slug, который мы писали в CMS (hero, content)
+
+		switch (block.blockType) {
+			case 'hero':
+				return <Hero {...block} />;
+			case 'content':
+				return <Content {...block} />;
+			default:
+				// Если создали новый блок в CMS, но забыли сделать компонент в Astro
+				return (
+					<div style='color: red; padding: 20px;'>
+						Неизвестный блок: {block.blockType}
+					</div>
+				);
+		}
+	})
+}
